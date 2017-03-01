@@ -6,5 +6,3 @@
 - subscribeOn: subscribe의 스레드
 - observeOn: observable의 스레드
 - ^^
-
-
