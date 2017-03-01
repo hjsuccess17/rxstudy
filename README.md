@@ -1,8 +1,11 @@
 # rxstudy
 # 기본
 ## observeOn,subscribeOn
-[https://blog.weirdx.io/post/26576](https://blog.weirdx.io/post/26576)
+[http://tiii.tistory.com/18](http://tiii.tistory.com/18)
+- subscribeOn: observable의 작업을 시작하는 쓰레드 지정
+- observeOn: subscribe 의 쓰레드 또는 observeOn 이후에 나오는 오퍼레이터의 스케줄러 지정
 
-- subscribeOn: subscribe의 스레드
-- observeOn: observable의 스레드
-- ^^
+
+
+# 추가 학습 링크
+- [https://realm.io/kr/news/rxandroid/](https://realm.io/kr/news/rxandroid/)
