@@ -25,4 +25,13 @@ public class AppInfo implements Comparable<Object> {
         AppInfo f = (AppInfo) another;
         return getName().compareTo(f.getName());
     }
+
+    @Override
+    public String toString() {
+        return "AppInfo{" +
+                "mLastUpdateTime=" + mLastUpdateTime +
+                ", mName='" + mName + '\'' +
+                ", mIcon='" + mIcon + '\'' +
+                '}';
+    }
 }

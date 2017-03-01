@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import com.packtpub.apps.rxjava_essentials.App;
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.Utils;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -36,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -82,6 +84,7 @@ public class FirstExampleFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(file -> {
+                    L.d("getFileDir:subscribe");
                     mFilesDir = file;
                     refreshTheList();
                 });
@@ -89,6 +92,7 @@ public class FirstExampleFragment extends Fragment {
 
     private Observable<File> getFileDir() {
         return Observable.create(subscriber -> {
+            L.d("Observable:getFileDir");//RxCachedThreadScheduler
             subscriber.onNext(App.instance.getFilesDir());
             subscriber.onCompleted();
         });
@@ -96,10 +100,29 @@ public class FirstExampleFragment extends Fragment {
 
     private void refreshTheList() {
         getApps()
+                //onNext 단일 호출
+                /*.subscribe(new Observer<AppInfo>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AppInfo appInfo) {
+                        L.d("refreshTheList:subscribe:onNext->"+appInfo.toString());
+                    }
+                });*/
+                //toSortedList 스트림은 아이템을 모아서 List를 만들 후 Sort 결과로 Observer에 리스트를 전달한다
                 .toSortedList()
                 .subscribe(new Observer<List<AppInfo>>() {
                     @Override
                     public void onCompleted() {
+                        L.d("refreshTheList:subscribe:onCompleted");
                         Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG).show();
                     }
 
@@ -111,6 +134,7 @@ public class FirstExampleFragment extends Fragment {
 
                     @Override
                     public void onNext(List<AppInfo> appInfos) {
+                        L.d("refreshTheList:subscribe:onNext->"+appInfos.size());
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mAdapter.addApplications(appInfos);
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -123,6 +147,7 @@ public class FirstExampleFragment extends Fragment {
         ApplicationsList.getInstance().setList(appInfos);
 
         Schedulers.io().createWorker().schedule(() -> {
+            L.d("Schedulers:schedule");//RxCachedThreadScheduler
             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
             Type appInfoType = new TypeToken<List<AppInfo>>() {
             }.getType();
@@ -131,7 +156,16 @@ public class FirstExampleFragment extends Fragment {
     }
 
     private Observable<AppInfo> getApps() {
+        //java
+//        Observable.create(new Observable.OnSubscribe<AppInfo>() {
+//            @Override
+//            public void call(Subscriber<? super AppInfo> subscriber) {
+//
+//            }
+//        });
+        //lambda
         return Observable.create(subscriber -> {
+            L.d("Observable:getApps");
             List<AppInfoRich> apps = new ArrayList<>();
 
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
@@ -151,9 +185,11 @@ public class FirstExampleFragment extends Fragment {
                 if (subscriber.isUnsubscribed()) {
                     return;
                 }
+                L.d("Observable:getApps->name="+name);
                 subscriber.onNext(new AppInfo(name, iconPath, appInfo.getLastUpdateTime()));
             }
             if (!subscriber.isUnsubscribed()) {
+                L.d("Observable:getApps->onCompleted");
                 subscriber.onCompleted();
             }
         });
