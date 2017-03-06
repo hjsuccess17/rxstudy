@@ -1,6 +1,7 @@
 package com.packtpub.apps.rxjava_essentials.chapter4;
 
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
+import rx.functions.Func1;
 
 
 public class FilterExampleFragment extends Fragment {
@@ -73,11 +75,43 @@ public class FilterExampleFragment extends Fragment {
     private void loadList(List<AppInfo> apps) {
         mRecyclerView.setVisibility(View.VISIBLE);
 
-        Observable.from(apps)
-                .filter((appInfo) -> appInfo.getName().startsWith("C"))
+        ArrayList<AppInfo> testList = new ArrayList<>();
+        testList.add(null);
+        testList.add(new AppInfo("aaaa", "bbbb", 1234));
+        Observable.from(testList)
+                .filter(new Func1<AppInfo, Boolean>() {
+                    @Override
+                    public Boolean call(AppInfo appInfo) {
+                        L.d("filter->"+(appInfo == null ? "isNull" : "isNotNull"));
+                        return appInfo != null;
+                    }
+                })
                 .subscribe(new Observer<AppInfo>() {
                     @Override
                     public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AppInfo appInfo) {
+                        L.d("onNext->appInfo="+appInfo);
+                    }
+                });
+        /*
+        Observable.from(apps)
+                .filter((appInfo) -> {
+                    L.d("filter->"+appInfo.getName());
+                    return appInfo.getName().startsWith("C");
+                })
+                .subscribe(new Observer<AppInfo>() {
+                    @Override
+                    public void onCompleted() {
+                        L.d("onCompleted");
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -91,7 +125,8 @@ public class FilterExampleFragment extends Fragment {
                     public void onNext(AppInfo appInfo) {
                         mAddedApps.add(appInfo);
                         mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
+                        L.d("onNext->appInfo="+appInfo);
                     }
-                });
+                });*/
     }
 }

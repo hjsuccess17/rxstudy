@@ -1,5 +1,6 @@
 package com.packtpub.apps.rxjava_essentials.chapter4;
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -80,18 +81,21 @@ public class DistinctExampleFragment extends Fragment {
                     @Override
                     public void onCompleted() {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        L.d("onCompleted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Toast.makeText(getActivity(), "Something went south!", Toast.LENGTH_SHORT).show();
                         mSwipeRefreshLayout.setRefreshing(false);
+                        L.d("onError");
                     }
 
                     @Override
                     public void onNext(AppInfo appInfo) {
                         mAddedApps.add(appInfo);
                         mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
+                        L.d("onNext->appInfo="+appInfo);
                     }
                 });
     }

@@ -1,6 +1,7 @@
 package com.packtpub.apps.rxjava_essentials.chapter4;
 
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -72,6 +74,25 @@ public class TakeExampleFragment extends Fragment {
 
     private void loadList(List<AppInfo> apps) {
         mRecyclerView.setVisibility(View.VISIBLE);
+
+        /*Observable.from(apps)
+                .debounce(3, TimeUnit.SECONDS)
+                .subscribe(new Observer<AppInfo>() {
+                    @Override
+                    public void onCompleted() {
+                        L.d("debounce:onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AppInfo appInfo) {
+                        L.d("debounce:onNext->"+appInfo);
+                    }
+                });*/
 
         Observable.from(apps)
                 .take(3)

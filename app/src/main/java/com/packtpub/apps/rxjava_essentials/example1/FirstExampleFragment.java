@@ -117,7 +117,7 @@ public class FirstExampleFragment extends Fragment {
                         L.d("refreshTheList:subscribe:onNext->"+appInfo.toString());
                     }
                 });*/
-                //toSortedList 스트림은 아이템을 모아서 List를 만들 후 Sort 결과로 Observer에 리스트를 전달한다
+                //toSortedList 스트림 아이템을 모아서 List를 만든 후 Sort 결과로 Observer에 리스트를 전달한다
                 .toSortedList()
                 .subscribe(new Observer<List<AppInfo>>() {
                     @Override

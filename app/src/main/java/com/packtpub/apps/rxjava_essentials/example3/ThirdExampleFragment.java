@@ -1,6 +1,7 @@
 package com.packtpub.apps.rxjava_essentials.example3;
 
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationAdapter;
@@ -27,6 +28,7 @@ import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.functions.Action1;
 
 public class ThirdExampleFragment extends Fragment {
 
@@ -83,8 +85,24 @@ public class ThirdExampleFragment extends Fragment {
 
     private void loadApps(AppInfo appOne, AppInfo appTwo, AppInfo appThree) {
         mRecyclerView.setVisibility(View.VISIBLE);
-
-        Observable<AppInfo> threeOfThem = Observable.just(appOne, appTwo, appThree);
+        //람다 표현식 버전
+        Observable<AppInfo> observable = Observable.just(appOne, appTwo, appThree);
+        observable.subscribe(appInfo -> {
+                    mAddedApps.add(appInfo);
+                    mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
+                    L.d("onNext->appInfo=" + appInfo);
+                }, error -> {
+                    Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    L.d("onError->error=" + error);
+                }, () -> {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG).show();
+                    L.d("onCompleted");
+                }
+        );
+        //자바 버전
+        /*Observable<AppInfo> threeOfThem = Observable.just(appOne, appTwo, appThree);
 
         threeOfThem.subscribe(new Observer<AppInfo>() {
             @Override
@@ -103,8 +121,9 @@ public class ThirdExampleFragment extends Fragment {
             public void onNext(AppInfo appInfo) {
                 mAddedApps.add(appInfo);
                 mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
+                L.d("onNext->appInfo="+appInfo);
             }
-        });
+        });*/
 
         mTimeSubscription = Observable.timer(3, 3, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
@@ -119,7 +138,7 @@ public class ThirdExampleFragment extends Fragment {
 
                     @Override
                     public void onNext(Long number) {
-                        Log.d("RXJAVA", "I say " + number);
+                        L.d("I say " + number);
                     }
                 });
     }
