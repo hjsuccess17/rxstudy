@@ -15,6 +15,7 @@ Observable.create(new Observable.OnSubscribe<AppInfo>() {
 //람다 표현식
 Observable.create(subscriber -> { } );
 </code></pre>
+
 ## Observable.just()
 - 기존 코드를 Obserable로 변환
 - 아래 예시는 onNext() 가 3번 불린다.
