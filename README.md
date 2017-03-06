@@ -63,8 +63,7 @@ Observable.from(apps)
                         L.d("onNext->appInfo="+appInfo);
                     }
                 });
-
-#아래처럼 null 객체를 필터링하여 구독자는 별도의 null 값을 체크할 필요없이 앱로직만 신경쓰면된다.(분리/추상화)
+//아래처럼 null 객체를 필터링하여 구독자는 별도의 null 값을 체크할 필요없이 앱로직만 신경쓰면된다.(분리/추상화)
 ArrayList<AppInfo> testList = new ArrayList<>();
         testList.add(null);
         testList.add(new AppInfo("aaaa", "bbbb", 1234));
