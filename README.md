@@ -150,9 +150,9 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 
 ## observeOn(), subscribeOn()
 [http://tiii.tistory.com/18](http://tiii.tistory.com/18)
-- subscribeOn: observable의 작업을 시작하는 쓰레드 지정
-- observeOn: subscribe 의 쓰레드 또는 observeOn 이후에 나오는 오퍼레이터의 스케줄러 지정
-- 쓰레드 스케줄러는 위 링크 참고
+                   - subscribeOn: observable의 작업을 시작하는 쓰레드 지정
+                   - observeOn: subscribe 의 쓰레드 또는 observeOn 이후에 나오는 오퍼레이터의 스케줄러 지정
+                   - 쓰레드 스케줄러는 위 링크 참고
 
 
 
@@ -161,7 +161,7 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 기본설명
 - [http://pluu.github.io/blog/rx/2015/04/29/rxjava/](http://pluu.github.io/blog/rx/2015/04/29/rxjava/)
 map, flatMap, merge 등 간단한 설명
-- [http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/](http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/),
-[http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135](http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135)
-gdg 스터디 문서(flatMap, concatMap)
+- [http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/](http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/) gdg 스터디 문서(flatMap, concatMap),
+[http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135](http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135) (flatMap, concatMap)
+
 
