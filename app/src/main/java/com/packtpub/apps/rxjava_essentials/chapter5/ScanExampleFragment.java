@@ -1,5 +1,6 @@
 package com.packtpub.apps.rxjava_essentials.chapter5;
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -73,13 +74,17 @@ public class ScanExampleFragment extends Fragment {
 
         Observable.from(apps)
                 .scan((appInfo, appInfo2) -> {
+                    //첫번째 아이템이 발행되어 onNext() 호출
+                    //두번째부터는 첫번째와 두번째를 비교해서
                     if (appInfo.getName().length() > appInfo2.getName().length()) {
+                        L.d(">>>appInfo="+appInfo+",appInfo2="+appInfo2);
                         return appInfo;
                     } else {
+                        L.d(">>>appInfo2="+appInfo2+",appInfo="+appInfo);
                         return appInfo2;
                     }
                 })
-                .distinct()
+                .distinct() //중복제거
                 .subscribe(new Observer<AppInfo>() {
                     @Override
                     public void onCompleted() {
@@ -94,6 +99,7 @@ public class ScanExampleFragment extends Fragment {
 
                     @Override
                     public void onNext(AppInfo appInfo) {
+                        L.d(">>>appInfo="+appInfo);
                         mAddedApps.add(appInfo);
                         mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
                     }

@@ -1,5 +1,6 @@
 package com.packtpub.apps.rxjava_essentials.chapter5;
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -23,7 +24,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class MapExampleFragment extends Fragment {
 
@@ -72,6 +75,19 @@ public class MapExampleFragment extends Fragment {
     private void loadList(List<AppInfo> apps) {
         mRecyclerView.setVisibility(View.VISIBLE);
 
+        //1. map
+        Observable.from(new String[]{"Hello", "world!"})
+                .map(new Func1<String, Integer>() {
+                    @Override
+                    public Integer call(String s) {
+                        return s.length();
+                    }
+                })
+                .subscribe(action -> {
+                   L.d(">>>"+action);
+                });
+
+        //2. map
         Observable.from(apps)
                 .map(new Func1<AppInfo, AppInfo>() {
                     @Override
@@ -79,12 +95,14 @@ public class MapExampleFragment extends Fragment {
                         String currentName = appInfo.getName();
                         String lowerCaseName = currentName.toLowerCase();
                         appInfo.setName(lowerCaseName);
+                        L.d(">>>"+lowerCaseName);
                         return appInfo;
                     }
                 })
                 .subscribe(new Observer<AppInfo>() {
                     @Override
                     public void onCompleted() {
+                        L.d(">>>");
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -96,9 +114,29 @@ public class MapExampleFragment extends Fragment {
 
                     @Override
                     public void onNext(AppInfo appInfo) {
+                        L.d(">>>"+appInfo);
                         mAddedApps.add(appInfo);
                         mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
                     }
                 });
+
+        //3. flatMap
+        String[][] array2 = { {"hello", "world"}, {"goodbye", "world!"}};
+        Observable.from(array2)
+                .flatMap(array -> {
+                    L.d(">>>text="+array[0]+","+array[1]);
+
+//                    String error = array[3]; //에러발생시 스트림은 끊긴다
+                    return Observable.from(array);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(text -> {
+                   L.d(">>>text="+text);
+                }, error -> {
+                    L.d(">>>error");
+                });
+
+
     }
 }

@@ -1,6 +1,7 @@
 package com.packtpub.apps.rxjava_essentials.chapter5;
 
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
@@ -82,12 +83,13 @@ public class GroupByExampleFragment extends Fragment {
                     @Override
                     public String call(AppInfo appInfo) {
                         SimpleDateFormat formatter = new SimpleDateFormat("MM/yyyy");
+                        L.d(">>>"+appInfo.getName()+","+formatter.format(new Date(appInfo.getLastUpdateTime())));
                         return formatter.format(new Date(appInfo.getLastUpdateTime()));
                     }
                 });
 
         Observable
-                .concat(groupedItems)
+                .concat(groupedItems) //groupBy 로 묶인 AppInfo를 그룹된 순서대로 observable로 발행한다
                 .subscribe(new Observer<AppInfo>() {
                     @Override
                     public void onCompleted() {
@@ -102,6 +104,7 @@ public class GroupByExampleFragment extends Fragment {
 
                     @Override
                     public void onNext(AppInfo appInfo) {
+                        L.d(">>>"+appInfo.getName());
                         mAddedApps.add(appInfo);
                         mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
                     }

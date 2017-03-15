@@ -122,12 +122,46 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 - 옵저버블이 아이템을 발행한 후 일정 시간 동안 발행되지 않은경우 마지막 아이템을 발행한다
 - 일정 시간이 끝나기전 아이템이 발행되면 내부 타이머는 재시작된다
 
-## observeOn,subscribeOn
+## map()
+- 새로운 observable 을 생성한다
+- 1:1, 동기
+
+##flatMap()
+- Observable 을 분해하여 1개의 observable 을 생성한다
+- 배열을 갖고있는 Observble을 분해하여 각각의 문자로 발행할수 있다
+- 에러 발생시 onError()를 발생시키고 중지된다
+- merge()사용. 비동기
+
+##concatMap()
+- flatMap()은 입력즉시 발행되어 출력되는 순서가 달라질수 있지만, concatMap()은 입력된 항목 처리가 완료된 후 다음 항목을 처리하기때문에 입력한 그대로 발행되어 순서가 보장된다
+- concat() 사용, 동기
+
+##scan()
+- 누적해서 비교한다
+
+##flatMapIterable(), switchMap()
+-
+
+## groupBy()
+- 같은 종류를 묶을수 있다
+
+## buffer(), window(), cast()
+-
+
+## observeOn(), subscribeOn()
 [http://tiii.tistory.com/18](http://tiii.tistory.com/18)
 - subscribeOn: observable의 작업을 시작하는 쓰레드 지정
 - observeOn: subscribe 의 쓰레드 또는 observeOn 이후에 나오는 오퍼레이터의 스케줄러 지정
 - 쓰레드 스케줄러는 위 링크 참고
 
 
+
 # 추가 학습 링크
 - [https://realm.io/kr/news/rxandroid/](https://realm.io/kr/news/rxandroid/)
+기본설명
+- [http://pluu.github.io/blog/rx/2015/04/29/rxjava/](http://pluu.github.io/blog/rx/2015/04/29/rxjava/)
+map, flatMap, merge 등 간단한 설명
+- [http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/](http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/),
+[http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135](http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135)
+gdg 스터디 문서(flatMap, concatMap)
+
