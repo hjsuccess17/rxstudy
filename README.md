@@ -97,7 +97,7 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 - 처음 2개 요소만 발행
 - 마지막 1개 요소만 발행
 
-##distinct(), distinctUntilChanged()
+## distinct(), distinctUntilChanged()
 - 중복 제거
 - 이전에 발행했던 값과 다른 새로운 값을 발행한 경우에만 onNext() 호출
 
