@@ -140,13 +140,13 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 - 누적해서 비교한다
 
 ##flatMapIterable(), switchMap()
--
+- ...
 
 ## groupBy()
 - 같은 종류를 묶을수 있다
 
 ## buffer(), window(), cast()
--
+- ...
 
 ## observeOn(), subscribeOn()
 [http://tiii.tistory.com/18](http://tiii.tistory.com/18)
