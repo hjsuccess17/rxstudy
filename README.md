@@ -126,20 +126,20 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 - 새로운 observable 을 생성한다
 - 1:1, 동기
 
-##flatMap()
+## flatMap()
 - Observable 을 분해하여 1개의 observable 을 생성한다
 - 배열을 갖고있는 Observble을 분해하여 각각의 문자로 발행할수 있다
 - 에러 발생시 onError()를 발생시키고 중지된다
 - merge()사용. 비동기
 
-##concatMap()
+## concatMap()
 - flatMap()은 입력즉시 발행되어 출력되는 순서가 달라질수 있지만, concatMap()은 입력된 항목 처리가 완료된 후 다음 항목을 처리하기때문에 입력한 그대로 발행되어 순서가 보장된다
 - concat() 사용, 동기
 
-##scan()
+## scan()
 - 누적해서 비교한다
 
-##flatMapIterable(), switchMap()
+## flatMapIterable(), switchMap()
 - ...
 
 ## groupBy()
