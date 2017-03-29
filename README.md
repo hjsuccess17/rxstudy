@@ -148,11 +148,41 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 ## buffer(), window(), cast()
 - ...
 
+## .io()
+- 쓰레드 풀을 사용
+- I/O 특화
+
+## .computation()
+- I/O와 관련없는 기본 스케줄러
+- 간단한 연산이나 콜백처리로 사용되며 I/O 처리는 안하는것이 좋다
+- buffer(), debounce(), delay(), interval(), sample(), skip() 등에서 기본 스케줄러
+
+## .immediate()
+- 현재 쓰레드에서 특정 작업을 바로 시작
+- timeout(), timeInterval(), timestamp() 의 기본 스케줄러
+
+## .newThread()
+- 새로운 쓰레드에서 작업
+
+## .trampoline()
+- 현재 쓰레드에서 작업을 실행하지만 바로 실행하고 싶지 않을경우
+- 큐에 있는 일이 끝나면 이어서 현재 스레드에서 수행
+- repeat(), retry() 기본 스케줄러
+
+## AndroidSchedulers.mainThread()
+- 안드로이드 UI 스레드에서 동작
+
+## Schedulers.newThread().createWorker()
+- 새로운 스레드에서 수행
+- worker.schedule(new Action0() { public void call() { ... }  })
+
 ## observeOn(), subscribeOn()
 - subscribeOn: observable의 작업을 시작하는 쓰레드 지정
 - observeOn: subscribe 의 쓰레드 또는 observeOn 이후에 나오는 오퍼레이터의 스케줄러 지정
 - 쓰레드 스케줄러는 링크 참고 ([http://tiii.tistory.com/18](http://tiii.tistory.com/18))
 
+## onBackpressureBuffer()
+- 옵저버블이 옵저버가 소비하는 것보다 더 빠르게 아이템을 발행하는 경우 옵저버블에게 아이템을 버퍼에 저장
 
 
 # 추가 학습 링크
@@ -162,5 +192,7 @@ ArrayList<AppInfo> testList = new ArrayList<>();
 map, flatMap, merge 등 간단한 설명
 - [http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/](http://kunny.github.io/community/2016/02/08/gdg_korea_android_weekly_02_1/) gdg 스터디 문서(flatMap, concatMap),
 [http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135](http://blog.naver.com/PostView.nhn?blogId=tmondev&logNo=220591733135) (flatMap, concatMap)
-
-
+- [https://realm.io/kr/news/rxandroid-4/](https://realm.io/kr/news/rxandroid-4/)
+스케줄러 설명
+- [http://realignist.me/code/2017/01/25/rxjava2-changelog.html](http://realignist.me/code/2017/01/25/rxjava2-changelog.html)
+RxJava 2.x 달라진점

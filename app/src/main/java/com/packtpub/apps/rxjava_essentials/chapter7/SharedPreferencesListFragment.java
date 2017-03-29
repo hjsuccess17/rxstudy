@@ -76,8 +76,8 @@ public class SharedPreferencesListFragment extends Fragment {
         mRecyclerView.setVisibility(View.VISIBLE);
 
         getApps()
-                .onBackpressureBuffer()
-                .subscribeOn(Schedulers.io())
+                .onBackpressureBuffer() //옵저버블이 옵저버가 소비하는 것보다 더 빠르게 아이템을 발행하는 경우 옵저버블에게 아이템을 버퍼에 저장
+                .subscribeOn(Schedulers.io()) //getApps 는 io 스레드에서 Preference로부터 json을 불러온다
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AppInfo>() {
                     @Override
@@ -113,6 +113,7 @@ public class SharedPreferencesListFragment extends Fragment {
                         apps = new Gson().fromJson(serializedApps, appInfoType);
                     }
 
+                    //json 을 객채 변환 후 AppInfo 발행
                     for (AppInfo app : apps) {
                         subscriber.onNext(app);
                     }

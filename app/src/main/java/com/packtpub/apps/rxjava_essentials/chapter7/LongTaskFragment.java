@@ -1,6 +1,7 @@
 package com.packtpub.apps.rxjava_essentials.chapter7;
 
 
+import com.packtpub.apps.rxjava_essentials.L;
 import com.packtpub.apps.rxjava_essentials.R;
 import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
 import com.packtpub.apps.rxjava_essentials.apps.ApplicationAdapter;
@@ -25,6 +26,8 @@ import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.schedulers.HandlerThreadScheduler;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
@@ -76,14 +79,19 @@ public class LongTaskFragment extends Fragment {
         mRecyclerView.setVisibility(View.VISIBLE);
 
         getObservableApps(apps)
-                .onBackpressureBuffer()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
+                .onBackpressureBuffer() //옵저버블이 옵저버가 소비하는 것보다 더 빠르게 아이템을 발행하는 경우 옵저버블에게 아이템을 버퍼에 저장
+                .subscribeOn(Schedulers.computation()) //기본 스케줄러-getObservableApps -> Observable (RxComputationThreadPool)
+//                .subscribeOn(Schedulers.io()) //io 스레드(RxCachedThreadScheduler)
+//                .subscribeOn(Schedulers.immediate()) //현재 스레드 (main 또는 RxComputationThreadPool... 앞에 설정한 스케줄러에 영향을 받는다)
+//                .subscribeOn(Schedulers.newThread()) //새로운 스레드 (RxNewThreadScheduler)
+//                .subscribeOn(Schedulers.trampoline()) //현재 스레드-큐 (main 또는 RxComputationThreadPool... 앞에 설정한 스케줄러에 영향을 받는다)
+                .observeOn(AndroidSchedulers.mainThread()) //메인 스레드-subscribe
                 .subscribe(new Observer<AppInfo>() {
                     @Override
                     public void onCompleted() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG).show();
+                        L.d(">>>getObservableApps->subscribe->onCompleted");
                     }
 
                     @Override
@@ -98,13 +106,31 @@ public class LongTaskFragment extends Fragment {
                     public void onNext(AppInfo appInfo) {
                         mAddedApps.add(appInfo);
                         mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
+                        L.d(">>>getObservableApps>subscribe->onNext");
                     }
                 });
+
+
+        //trampoline 예제
+        Action1<Integer> onNext = new Action1<Integer>() {
+            @Override public void call(Integer integer) {
+                L.d("Number=" + integer);
+            }
+        };
+        Observable.just(2, 4, 6, 8, 10)
+                .subscribeOn(Schedulers.trampoline())
+//                .subscribeOn(Schedulers.io())
+                .subscribe(onNext);
+        Observable.just(1, 3, 5, 7, 9)
+                .subscribeOn(Schedulers.trampoline())
+//                .subscribeOn(Schedulers.io())
+                .subscribe(onNext);
     }
 
     private Observable<AppInfo> getObservableApps(List<AppInfo> apps) {
         return Observable
                 .create(subscriber -> {
+                    L.d(">>>getObservableApps");
                     for (double i = 0; i < 1000000000; i++) {
                         double y = i * i;
                     }

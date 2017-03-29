@@ -39,6 +39,7 @@ public class NetworkTaskFragment extends Fragment {
     @InjectView(R.id.button_download)
     Button mButton;
 
+    //PublishSubject는 순차적 발행한다 javadoc 참고
     private PublishSubject<Integer> mDownloadProgress = PublishSubject.create();
 
     @Override
@@ -57,6 +58,8 @@ public class NetworkTaskFragment extends Fragment {
         mButton.setText(getString(R.string.downloading));
         mButton.setClickable(false);
 
+
+        //메인스레드에서 프로그래스 업뎃
         mDownloadProgress
                 .distinct()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -80,10 +83,13 @@ public class NetworkTaskFragment extends Fragment {
         String destination = "/sdcard/softboy.avi";
 
         obserbableDownload("http://archive.blender.org/fileadmin/movies/softboy.avi", destination)
+                //네트워크 다운로드는 io 스레드에서 하면서 프레그래스 업뎃은 PublishSubject에서 메인스레드
+                //
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread()) //아래 subscribe 는 메인스레드
                 .subscribe(success -> {
-                    resetDownloadButton();
+                    //UI 업뎃
+                   resetDownloadButton();
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
                     File file = new File(destination);
                     intent.setDataAndType(Uri.fromFile(file), "video/avi");
@@ -106,6 +112,7 @@ public class NetworkTaskFragment extends Fragment {
             try {
                 boolean result = downloadFile(source, destination);
                 if (result) {
+                    //다운로드가 완료된경우 UI버튼을 설정하고 동영상을 실행시킴
                     subscriber.onNext(true);
                     subscriber.onCompleted();
                 } else {
@@ -144,13 +151,16 @@ public class NetworkTaskFragment extends Fragment {
 
                 if (fileLength > 0) {
                     int percentage = (int) (total * 100 / fileLength);
+                    //프로그레스 업뎃
                     mDownloadProgress.onNext(percentage);
                 }
                 output.write(data, 0, count);
             }
+            //다운완료
             mDownloadProgress.onCompleted();
             result = true;
         } catch (Exception e) {
+            //에러
             mDownloadProgress.onError(e);
         } finally {
             try {
@@ -166,6 +176,7 @@ public class NetworkTaskFragment extends Fragment {
 
             if (connection != null) {
                 connection.disconnect();
+                //완료
                 mDownloadProgress.onCompleted();
             }
         }
