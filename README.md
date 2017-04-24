@@ -196,3 +196,10 @@ map, flatMap, merge 등 간단한 설명
 스케줄러 설명
 - [http://realignist.me/code/2017/01/25/rxjava2-changelog.html](http://realignist.me/code/2017/01/25/rxjava2-changelog.html)
 RxJava 2.x 달라진점
+
+# 오픈소스
+- https://github.com/mmirhoseini/marvel
+- https://github.com/esoxjem/MovieGuide
+- https://github.com/Ansh1234/RxDownloader
+- https://github.com/reark/reark
+- https://github.com/macoscope/RoomBookerMVP
